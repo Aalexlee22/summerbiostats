@@ -59,12 +59,20 @@ Sleep_data %>%  ggplot(aes(x=PhysActive, fill= Diabetes)) + geom_bar() + labs(y 
 Sleep_data %>% ggplot(aes(x = Education, fill = Diabetes)) + geom_bar(position = "fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Education Level")
 Sleep_data %>% ggplot(aes(x = Race1, fill = Diabetes)) + geom_bar(position = "fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Race") 
 Sleep_data %>%  ggplot(aes(x=Depressed, fill= Diabetes)) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Depression")
+
+Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) + geom_boxplot()  + labs(y = "Proportion", title = "Proportion of Diabetes by Poverty")
 ```
-## Evaluation  of Type 2 Diabetes between lack of sleep, Age, BMI, Physical Activity, Education, ethnicity, and Depression 
+
+
+
+
+
+
+## Evaluation  of Type 2 Diabetes between Sleep troubles and other factors
 
 ```{r}
 Sleep_data$Education <- relevel(Sleep_data$Education, ref = "Some College")
-Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Depressed, data= Sleep_data, family = binomial(link = "logit"))
+Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Depressed + Poverty, data= Sleep_data, family = binomial(link = "logit"))
 summary(Sleep_data_glm)
 
 
