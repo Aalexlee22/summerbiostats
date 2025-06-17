@@ -1,7 +1,7 @@
 ---
 title: Is Sleep Trouble Associated with Type 2 Diabetes? An analysis using NHANES
   Data
-author: "Wanda L"
+author: 
 output:
   pdf_document: default
   html_notebook: default
