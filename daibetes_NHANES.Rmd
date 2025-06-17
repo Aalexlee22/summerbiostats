@@ -1,7 +1,6 @@
 ---
-title: Is Sleep Trouble Associated with Type 2 Diabetes? An analysis using NHANES
-  Data
-author: 
+title: Is sleep trouble associated with Type II diabetes, after adjusting other factors?
+author: "Wanda L"
 output:
   pdf_document: default
   html_notebook: default
@@ -29,12 +28,14 @@ library(ggplot2)
 ```
 
 
-## **Research project idea 2**
+## **Question: Is sleep trouble associated with Type II diabetes, after adjusting other factors?**
 
-We know that diabetes is a disease that negatively affects everyone, as it hinders quality of life.
-There are many factors that can contribute to its development, such as being overweight, physical inactivity, a family history of diabetes, or the level of abdominal fat accumulation.
+It has been shown that there is a relationship between type II diabetes and sleep problems, several studies suggest that sleep problems are associated with an increased risk of developing type II diabetes. Sleep trouble may alter metabolic, endocrine, and inflammatory pathways, thereby increasing diabetes risk (Cappuccio et al., 2010; Darraj, 2023).
+Furthermore, factors such as depression, higher body mass index (BMI), older age, lower socioeconomic status, education, and some racial and ethnic background have all been linked to higher rates of diabetes (Knol et al., 2006; Hill-Briggs et al., 2021; Spanakis & Golden, 2013). 
 
-In this case, we evaluated the association between sleep trouble and Type 2 diabetes, adjusting for clinical (BMI, age), behavioral (physical activity), demographics (education, race), and mental health (depression) factors. Sleep trouble remained significantly associated with diabetes risk, suggesting an independent effect even after accounting for traditional and social determinants of health.
+### Hypothesis
+
+People with sleep trouble are more likely to have diabetes type II, even after adjusting for other risk factors
 
 ### Preparing the data
 
@@ -62,11 +63,6 @@ Sleep_data %>%  ggplot(aes(x=Depressed, fill= Diabetes)) + geom_bar(position="fi
 
 Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) + geom_boxplot()  + labs(y = "Proportion", title = "Percentage of Diabetes II patients by Poverty")
 ```
-
-
-
-
-
 
 ## Evaluation  of Type 2 Diabetes between Sleep troubles and other factors
 
