@@ -1,0 +1,81 @@
+---
+title: Is Sleep Trouble Associated with Type 2 Diabetes? An analysis using NHANES
+  Data
+author: "Wanda L"
+output:
+  pdf_document: default
+  html_notebook: default
+  word_document: default
+---
+# WHAT IS NHANES?
+
+The NHANES survey is conducted by the US CDC. See \url{https://www.cdc.gov/nchs/nhanes/about_nhanes.htm}. These surveys have been conducted since the 1960’s.
+
+Starting in 1999, about 5,000 individuals of all ages have been interviewed every year and then they complete the health examination component of the survey. Part of this dataset is made available via the NHANES package which can be loaded this way:
+
+```{r}
+data(NHANES) 
+dim(NHANES)
+summary(NHANES)
+view(NHANES)
+```
+Before we start, it is necessary run the packages that we are going to use, in this case would be: 
+
+```{r setup}
+library(tidyverse)
+library(gtsummary)
+library(NHANES)
+library(ggplot2)
+```
+
+
+## **Research project idea 2**
+
+We know that diabetes is a disease that negatively affects everyone, as it hinders quality of life.
+There are many factors that can contribute to its development, such as being overweight, physical inactivity, a family history of diabetes, or the level of abdominal fat accumulation.
+
+In this case, we evaluated the association between sleep trouble and Type 2 diabetes, adjusting for clinical (BMI, age), behavioral (physical activity), demographics (education, race), and mental health (depression) factors. Sleep trouble remained significantly associated with diabetes risk, suggesting an independent effect even after accounting for traditional and social determinants of health.
+
+### Preparing the data
+
+First we need to select only the data that we will use, in this case of Diabetes is caused for Sleep trouble and if Age, gender or Race are related.
+
+```{r}
+NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed)
+Sleep_data <-NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed) %>% filter(!is.na(Diabetes),!is.na(SleepTrouble), !is.na(Age), !is.na(Education), !is.na(Race1),  !is.na(Depressed))
+summary(Sleep_data)
+
+```
+
+### Graphics models
+
+To have an overview of the relationship between diabetes and other factors, a graphic model of each of them was created.
+
+```{r Graphics}
+Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes, )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Sleep trouble")
+Sleep_data %>%  ggplot(aes(x=Age, fill= Diabetes )) + geom_boxplot() + labs(title = "Proportion of Diabetes by Age")
+Sleep_data %>%  ggplot(aes(x=BMI, fill= Diabetes )) + geom_boxplot()+ labs( title = "Proportion of Diabetes by BMI") 
+Sleep_data %>%  ggplot(aes(x=PhysActive, fill= Diabetes)) + geom_bar() + labs(y = "Proportion", title = "Proportion of Diabetes by Physical Activity") 
+Sleep_data %>% ggplot(aes(x = Education, fill = Diabetes)) + geom_bar(position = "fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Education Level")
+Sleep_data %>% ggplot(aes(x = Race1, fill = Diabetes)) + geom_bar(position = "fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Race") 
+Sleep_data %>%  ggplot(aes(x=Depressed, fill= Diabetes)) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Depression")
+```
+## Evaluation  of Type 2 Diabetes between lack of sleep, Age, BMI, Physical Activity, Education, ethnicity, and Depression 
+
+```{r}
+Sleep_data$Education <- relevel(Sleep_data$Education, ref = "Some College")
+Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Depressed, data= Sleep_data, family = binomial(link = "logit"))
+summary(Sleep_data_glm)
+
+
+```
+```{r}
+odds_ratios <- exp(coef(Sleep_data_glm))
+print(odds_ratios)
+```
+
+**Interpretation:**
+
+People who reported trouble sleeping were about 23% more likely to have diabetes than those who didn’t have sleep problems. Also, for each year older someone is, and for every extra point in BMI, the odds of having diabetes go up by 6% and 9%, respectively. People who felt depressed most of the time had about 79% higher odds of diabetes compared to those who didn’t feel depressed. Having only up to an 8th grade education increased the odds of diabetes by about 96%, while being a college graduate was linked to 19% lower odds, both compared to people with some college education. Physical activity seemed to reduce the odds of diabetes just a little, but this wasn’t significant in my model. After looking at the graphs, I also found that ethnicity didn’t seem to be a significant factor in diabetes risk. So overall, the biggest factors tied to higher odds of diabetes in my analysis were trouble sleeping, older age, higher BMI, feeling depressed most of the time, and lower education level.
+
+
