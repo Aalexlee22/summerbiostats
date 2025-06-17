@@ -41,8 +41,8 @@ In this case, we evaluated the association between sleep trouble and Type 2 diab
 First we need to select only the data that we will use, in this case of Diabetes is caused for Sleep trouble and if Age, gender or Race are related.
 
 ```{r}
-NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed)
-Sleep_data <-NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed) %>% filter(!is.na(Diabetes),!is.na(SleepTrouble), !is.na(Age), !is.na(Education), !is.na(Race1),  !is.na(Depressed))
+NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty)
+Sleep_data <-NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty) %>% filter(!is.na(Diabetes),!is.na(SleepTrouble), !is.na(Age), !is.na(Education), !is.na(Race1),  !is.na(Depressed), !is.na(Poverty))
 summary(Sleep_data)
 
 ```
@@ -52,7 +52,7 @@ summary(Sleep_data)
 To have an overview of the relationship between diabetes and other factors, a graphic model of each of them was created.
 
 ```{r Graphics}
-Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes, )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Sleep trouble")
+Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Sleep trouble")
 Sleep_data %>%  ggplot(aes(x=Age, fill= Diabetes )) + geom_boxplot() + labs(title = "Proportion of Diabetes by Age")
 Sleep_data %>%  ggplot(aes(x=BMI, fill= Diabetes )) + geom_boxplot()+ labs( title = "Proportion of Diabetes by BMI") 
 Sleep_data %>%  ggplot(aes(x=PhysActive, fill= Diabetes)) + geom_bar() + labs(y = "Proportion", title = "Proportion of Diabetes by Physical Activity") 
@@ -73,6 +73,7 @@ summary(Sleep_data_glm)
 odds_ratios <- exp(coef(Sleep_data_glm))
 print(odds_ratios)
 ```
+
 
 **Interpretation:**
 
