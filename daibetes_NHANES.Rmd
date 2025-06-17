@@ -71,7 +71,6 @@ Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) + geom_boxplot()  + labs(
 ## Evaluation  of Type 2 Diabetes between Sleep troubles and other factors
 
 ```{r}
-Sleep_data$Education <- relevel(Sleep_data$Education, ref = "Some College")
 Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Depressed + Poverty, data= Sleep_data, family = binomial(link = "logit"))
 summary(Sleep_data_glm)
 
