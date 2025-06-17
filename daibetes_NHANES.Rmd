@@ -52,15 +52,15 @@ summary(Sleep_data)
 To have an overview of the relationship between diabetes and other factors, a graphic model of each of them was created.
 
 ```{r Graphics}
-Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Sleep trouble")
-Sleep_data %>%  ggplot(aes(x=Age, fill= Diabetes )) + geom_boxplot() + labs(title = "Proportion of Diabetes by Age")
-Sleep_data %>%  ggplot(aes(x=BMI, fill= Diabetes )) + geom_boxplot()+ labs( title = "Proportion of Diabetes by BMI") 
-Sleep_data %>%  ggplot(aes(x=PhysActive, fill= Diabetes)) + geom_bar() + labs(y = "Proportion", title = "Proportion of Diabetes by Physical Activity") 
-Sleep_data %>% ggplot(aes(x = Education, fill = Diabetes)) + geom_bar(position = "fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Education Level")
-Sleep_data %>% ggplot(aes(x = Race1, fill = Diabetes)) + geom_bar(position = "fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Race") 
-Sleep_data %>%  ggplot(aes(x=Depressed, fill= Diabetes)) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Proportion of Diabetes by Depression")
+Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Prevalence of Sleep trouble in Diabetes II patients")
+Sleep_data %>%  ggplot(aes(x=Age, fill= Diabetes )) + geom_boxplot() + labs(title = "Percentage of Diabetes II patients by Age")
+Sleep_data %>%  ggplot(aes(x=BMI, fill= Diabetes )) + geom_boxplot()+ labs( title = "Percentage of Diabetes II patients by BMI") 
+Sleep_data %>%  ggplot(aes(x=PhysActive, fill= Diabetes)) + geom_bar() + labs(y = "Proportion", title = "Prevalence of Physical Activity in Diabetes II patients") 
+Sleep_data %>% ggplot(aes(x = Education, fill = Diabetes)) + geom_bar(position = "fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Percentage of Diabetes II patients by Education Level")
+Sleep_data %>% ggplot(aes(x = Race1, fill = Diabetes)) + geom_bar(position = "fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Percentage of Diabetes II patients by Race") 
+Sleep_data %>%  ggplot(aes(x=Depressed, fill= Diabetes)) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Prevalence of depression in Diabetes II patients")
 
-Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) + geom_boxplot()  + labs(y = "Proportion", title = "Proportion of Diabetes by Poverty")
+Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) + geom_boxplot()  + labs(y = "Proportion", title = "Percentage of Diabetes II patients by Poverty")
 ```
 
 
