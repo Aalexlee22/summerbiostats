@@ -13,7 +13,7 @@ Starting in 1999, about 5,000 individuals of all ages have been interviewed ever
 ```{r data}
 data(NHANES) 
 dim(NHANES)
-
+summary(NHANES)
 ```
 Before we start, it is necessary run the packages that we are going to use, in this case would be: 
 
@@ -290,47 +290,9 @@ Sleep_data %>% group_by(SleepTrouble) %>%
     plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
   )
 ```
-```{r}
-Sleep_data %>%
-  ggplot(aes(x = SleepTrouble, fill = Diabetes)) +
-  geom_bar(position = "fill") +
-  facet_wrap(~ Gender) +
-  labs(title = "Prevalence of Type II Diabetes by Sleep Trouble and gender",
-    x = "sleep trouble",
-    y = "count",
-    fill = "Diabetes",
-    caption = "Figure 11") +
-  scale_fill_manual(values = c("No" = "darkgoldenrod1",  
-                               "Yes" = "cornflowerblue")) +  
-  theme(
-    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
-    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
-  )
-
-```
-
-```{r}
-Sleep_data %>%
-  select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty, Gender) %>%
-  tbl_summary(by = Diabetes, statistic = all_continuous() ~ "{mean} ({sd})", 
-              missing = "no") %>%
-  add_overall() %>%
-  bold_labels()
-
-```
-
-
-```{r}
-Sleep_data_glm %>%
-  tbl_regression(exp = TRUE) %>%
-  bold_labels()
-
-```
 
 
 ## **Interpretation:**
 
-After adjusting for multiple factors such as age, BMI, physical activity, race, education, poverty, and depression, individuals with sleep trouble show a higher probability of having Type II diabetes. The predicted probability increases from 8.7% to 14.2%, suggesting a moderate but meaningful association. These findings align with prior research linking sleep disorders with metabolic dysregulation and diabetes risk.
-
+After adjusting multiple factors such as age, BMI, physical activity, race, education, poverty, depression and gender, individuals with sleep trouble show a higher probability of having Type II diabetes. The predicted probability increases from 8.7% to 14.2%, suggesting a moderate but meaningful association. These findings align with prior research linking sleep disorders with metabolic dysregulation and diabetes risk(Cappuccio et al., 2010; Darraj, 2023). 
 
