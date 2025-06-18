@@ -55,7 +55,10 @@ To have an overview of the relationship between diabetes and other factors, a gr
 ```{r Exploratory graphs by variable}
 
 
-Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + 
+Sleep_data %>%  
+  ggplot(aes(x=SleepTrouble, fill= Diabetes )) + 
+  geom_bar(position="fill") + 
+  scale_y_continuous(labels = scales::percent) + 
   labs(
   y = "Proportion", 
   title = "Prevalence of Type II Diabetes by Sleep Trouble",
@@ -78,10 +81,9 @@ Sleep_data %>%
   ggplot(aes(x=Age, fill= Diabetes )) + 
   geom_boxplot() + 
   labs(
-    title = "Percentage of Diabetes II patients by Age",
+    title = "Percentage of Age by Diabetes II patients",
     subtitle = "Based on NHANES Data",
     x = "Age",
-    y = "Proportion",
     fill = "Diabetes Status",
     caption = "Figure 2") +
   theme_minimal() +
@@ -99,10 +101,9 @@ Sleep_data %>%
   ggplot(aes(x=BMI, fill= Diabetes )) + 
   geom_boxplot()+ 
   labs( 
-    title = "Percentage of Diabetes II patients by BMI",
+    title = "Percentage of BMI by Diabetes II patients",
     subtitle = "Based on NHANES Data",
     x = "BMI",
-    y = "Proportion",
     fill = "Diabetes Status",
     caption = "Figure 3") +
   theme_minimal() +  
@@ -207,10 +208,9 @@ Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) +
   geom_boxplot()  + 
   labs(
     y = "Proportion", 
-    title = " Prevalence of Type II Diabetes by Income Level",
+    title = " Prevalence of Income Level by Type II Diabetes",
     subtitle = "Based on NHANES Data",
     x = "Poverty",
-    y = "Proportion",
     fill = "Diabetes Status",
     caption = "Figure 8") +
   theme_minimal() +  
