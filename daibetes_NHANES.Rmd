@@ -2,8 +2,8 @@
 title: Is sleep trouble associated with Type II diabetes, after adjusting other factors?
 author: "Wanda L"
 output:
-  pdf_document: default
   html_notebook: default
+  pdf_document: default
   word_document: default
 ---
 # WHAT IS NHANES?
@@ -25,10 +25,11 @@ library(tidyverse)
 library(gtsummary)
 library(NHANES)
 library(ggplot2)
+library(scales)
 ```
 
 
-## **Question: Is sleep trouble associated with Type II diabetes, after adjusting other factors?**
+## **Is sleep trouble associated with Type II diabetes, after adjusting other factors?**
 
 It has been shown that there is a relationship between type II diabetes and sleep problems, several studies suggest that sleep problems are associated with an increased risk of developing type II diabetes. Sleep trouble may alter metabolic, endocrine, and inflammatory pathways, thereby increasing diabetes risk (Cappuccio et al., 2010; Darraj, 2023).
 Furthermore, factors such as depression, higher body mass index (BMI), older age, lower socioeconomic status, education, and some racial and ethnic background have all been linked to higher rates of diabetes (Knol et al., 2006; Hill-Briggs et al., 2021; Spanakis & Golden, 2013). 
@@ -53,21 +54,78 @@ summary(Sleep_data)
 To have an overview of the relationship between diabetes and other factors, a graphic model of each of them was created.
 
 ```{r Graphics}
-Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Prevalence of Sleep trouble in Diabetes II patients")
-Sleep_data %>%  ggplot(aes(x=Age, fill= Diabetes )) + geom_boxplot() + labs(title = "Percentage of Diabetes II patients by Age")
-Sleep_data %>%  ggplot(aes(x=BMI, fill= Diabetes )) + geom_boxplot()+ labs( title = "Percentage of Diabetes II patients by BMI") 
-Sleep_data %>%  ggplot(aes(x=PhysActive, fill= Diabetes)) + geom_bar() + labs(y = "Proportion", title = "Prevalence of Physical Activity in Diabetes II patients") 
-Sleep_data %>% ggplot(aes(x = Education, fill = Diabetes)) + geom_bar(position = "fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Percentage of Diabetes II patients by Education Level")
-Sleep_data %>% ggplot(aes(x = Race1, fill = Diabetes)) + geom_bar(position = "fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Percentage of Diabetes II patients by Race") 
-Sleep_data %>%  ggplot(aes(x=Depressed, fill= Diabetes)) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Prevalence of depression in Diabetes II patients")
+Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Prevalence of Type II Diabetes by Sleep Trouble")
 
-Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) + geom_boxplot()  + labs(y = "Proportion", title = "Percentage of Diabetes II patients by Poverty")
+
+Sleep_data %>%  
+  ggplot(aes(x=Age, fill= Diabetes )) + 
+  geom_boxplot() + 
+  labs(
+    title = "Percentage of Diabetes II patients by Age") +
+  theme_minimal()
+
+
+Sleep_data %>%  
+  ggplot(aes(x=BMI, fill= Diabetes )) + 
+  geom_boxplot()+ 
+  labs( 
+    title = "Percentage of Diabetes II patients by BMI") +
+  theme_minimal()
+
+
+Sleep_data %>%  
+  ggplot(aes(x=PhysActive, fill= Diabetes)) + 
+  geom_bar() + 
+  labs(
+    y = "Proportion", 
+    title = "Prevalence of Type II Diabetes by Physical Activity") +
+  theme_minimal()
+
+
+Sleep_data %>% 
+  ggplot(aes(x = Education, fill = Diabetes)) + 
+  geom_bar(position = "fill") + 
+  scale_y_continuous(labels = scales::percent) + 
+  labs(
+    y = "Proportion", 
+    title = "Percentage of Diabetes II patients by Education Level")+
+  theme_minimal()
+
+
+Sleep_data %>% 
+  ggplot(aes(x = Race1, fill = Diabetes)) + 
+  geom_bar(position = "fill") + 
+  scale_y_continuous(labels = scales::percent) + 
+  labs(
+    y = "Proportion", 
+    title = "Percentage of Diabetes II patients by Race") +
+  theme_minimal()
+
+
+Sleep_data %>%  ggplot(aes(x=Depressed, fill= Diabetes)) + 
+  geom_bar(position="fill") + 
+  scale_y_continuous(labels = scales::percent) + 
+  labs(y = "Proportion", 
+       title = "Prevalence of Type II Diabetes by Depression Status")+
+  theme_minimal()
+
+
+Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) + 
+  geom_boxplot()  + 
+  labs(
+    y = "Proportion", 
+    title = " Prevalence of Type II Diabetes by Income Level") +
+  theme_minimal()
+
+
+
 ```
 
-## Evaluation  of Type 2 Diabetes between Sleep troubles and other factors
+## Run logistical regression model
+
 
 ```{r}
-Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Depressed + Poverty, data= Sleep_data, family = binomial(link = "logit"))
+Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Race1 + Depressed + Poverty, data= Sleep_data, family = binomial(link = "logit"))
 summary(Sleep_data_glm)
 
 
@@ -77,9 +135,23 @@ odds_ratios <- exp(coef(Sleep_data_glm))
 print(odds_ratios)
 ```
 
+```{r}
+Sleep_data <- Sleep_data %>%
+  mutate(predicted = predict(Sleep_data_glm, newdata = Sleep_data, type = "response"))
+
+```
+
+```{r}
+Sleep_data %>% group_by(SleepTrouble) %>%
+  summarise(prob = mean(predicted, na.rm = TRUE)) %>%
+  ggplot(aes(x = SleepTrouble, y = prob)) + geom_col(fill = "cornflowerblue") + labs(y = "Predicted Probability", title = "Estimated Probability of Type II Diabetes by Sleep Trouble") + theme_minimal()
+```
+
+
 
 **Interpretation:**
 
-People who reported trouble sleeping were about 23% more likely to have diabetes than those who didn’t have sleep problems. Also, for each year older someone is, and for every extra point in BMI, the odds of having diabetes go up by 6% and 9%, respectively. People who felt depressed most of the time had about 79% higher odds of diabetes compared to those who didn’t feel depressed. Having only up to an 8th grade education increased the odds of diabetes by about 96%, while being a college graduate was linked to 19% lower odds, both compared to people with some college education. Physical activity seemed to reduce the odds of diabetes just a little, but this wasn’t significant in my model. After looking at the graphs, I also found that ethnicity didn’t seem to be a significant factor in diabetes risk. So overall, the biggest factors tied to higher odds of diabetes in my analysis were trouble sleeping, older age, higher BMI, feeling depressed most of the time, and lower education level.
+
+
 
 
