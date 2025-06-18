@@ -1,7 +1,7 @@
 ---
 output:
-  html_notebook: default
   pdf_document: default
+  html_notebook: default
   word_document: default
 ---
 # WHAT IS NHANES?
@@ -10,7 +10,7 @@ The NHANES survey is conducted by the US CDC. [More about NHANES](https://www.cd
 
 Starting in 1999, about 5,000 individuals of all ages have been interviewed every year and then they complete the health examination component of the survey. Part of this dataset is made available via the NHANES package which can be loaded this way:
 
-```{r}
+```{r data}
 data(NHANES) 
 dim(NHANES)
 
@@ -40,19 +40,19 @@ People with sleep trouble are more likely to have diabetes type II, even after a
 
 Select only the data that we will use.
 
-```{r}
+```{r clean data}
 NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty)
 Sleep_data <-NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty) %>% filter(!is.na(Diabetes),!is.na(SleepTrouble), !is.na(Age), !is.na(BMI), !is.na(Education), !is.na(Race1),  !is.na(Depressed), !is.na(Poverty))
 summary(Sleep_data)
 
 ```
 
-### Graphics models
+### Exploratory graphs by variable
 
 To have an overview of the relationship between diabetes and other factors, a graphic model of each of them was created.
 
 
-```{r Graphics}
+```{r Exploratory graphs by variable}
 
 
 Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + 
@@ -227,28 +227,28 @@ Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) +
 ## Run logistical regression model
 
 
-```{r}
+```{r logistical regression}
 Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Race1 + Depressed + Poverty, data= Sleep_data, family = binomial(link = "logit"))
 summary(Sleep_data_glm)
 
 
 ```
-```{r}
+```{r Odd ratios}
 odds_ratios <- exp(coef(Sleep_data_glm))
 print(odds_ratios)
 ```
-```{r}
+```{r OR to percent}
 percent_change <- (odds_ratios - 1) * 100
 print(round(percent_change, 2))
 ```
 
-```{r}
+```{r Predicted model}
 Sleep_data <- Sleep_data %>%
   mutate(predicted = predict(Sleep_data_glm, newdata = Sleep_data, type = "response"))
 
 ```
 
-```{r}
+```{r Final graph}
 Sleep_data %>% group_by(SleepTrouble) %>%
   summarise(prob = mean(predicted, na.rm = TRUE)) %>%
   ggplot(aes(x = SleepTrouble, y = prob)) + 
@@ -265,11 +265,27 @@ Sleep_data %>% group_by(SleepTrouble) %>%
   )
 ```
 
+```{r results}
+final_table <- Sleep_data %>%
+  group_by(SleepTrouble) %>%
+  summarise(predicted = mean(predicted, na.rm = TRUE)) %>%
+  mutate(percent = predicted * 100)
+
+final_table
+
+```
 
 
-**Interpretation:**
 
+## **Interpretation:**
 
+This step predicts the probability of having diabetes for each person in the dataset. By grouping by SleepTrouble and taking the mean, you get something like:
+
+SleepTrouble = No → 8.7% probability
+
+SleepTrouble = Yes → 14.2% probability
+
+This indicates that, after adjusting for all factors, having sleep problems is associated with a higher probability of having Type 2 Diabetes.
 
 
 
