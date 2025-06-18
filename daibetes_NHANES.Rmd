@@ -1,6 +1,4 @@
 ---
-title: Is sleep trouble associated with Type II diabetes, after adjusting other factors?
-author: "Wanda L"
 output:
   html_notebook: default
   pdf_document: default
@@ -8,15 +6,14 @@ output:
 ---
 # WHAT IS NHANES?
 
-The NHANES survey is conducted by the US CDC. See \url{https://www.cdc.gov/nchs/nhanes/about_nhanes.htm}. These surveys have been conducted since the 1960’s.
+The NHANES survey is conducted by the US CDC. [More about NHANES](https://www.cdc.gov/nchs/nhanes/about/index.html). These surveys have been conducted since the 1960’s.
 
 Starting in 1999, about 5,000 individuals of all ages have been interviewed every year and then they complete the health examination component of the survey. Part of this dataset is made available via the NHANES package which can be loaded this way:
 
 ```{r}
 data(NHANES) 
 dim(NHANES)
-summary(NHANES)
-view(NHANES)
+
 ```
 Before we start, it is necessary run the packages that we are going to use, in this case would be: 
 
@@ -32,6 +29,7 @@ library(scales)
 ## **Is sleep trouble associated with Type II diabetes, after adjusting other factors?**
 
 It has been shown that there is a relationship between type II diabetes and sleep problems, several studies suggest that sleep problems are associated with an increased risk of developing type II diabetes. Sleep trouble may alter metabolic, endocrine, and inflammatory pathways, thereby increasing diabetes risk (Cappuccio et al., 2010; Darraj, 2023).
+
 Furthermore, factors such as depression, higher body mass index (BMI), older age, lower socioeconomic status, education, and some racial and ethnic background have all been linked to higher rates of diabetes (Knol et al., 2006; Hill-Briggs et al., 2021; Spanakis & Golden, 2013). 
 
 ### Hypothesis
@@ -40,7 +38,7 @@ People with sleep trouble are more likely to have diabetes type II, even after a
 
 ### Preparing the data
 
-First we need to select only the data that we will use, in this case of Diabetes is caused for Sleep trouble and if Age, gender or Race are related.
+Select only the data that we will use.
 
 ```{r}
 NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty)
@@ -116,9 +114,6 @@ Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) +
     y = "Proportion", 
     title = " Prevalence of Type II Diabetes by Income Level") +
   theme_minimal()
-
-
-
 ```
 
 ## Run logistical regression model
@@ -133,6 +128,10 @@ summary(Sleep_data_glm)
 ```{r}
 odds_ratios <- exp(coef(Sleep_data_glm))
 print(odds_ratios)
+```
+```{r}
+percent_change <- (odds_ratios - 1) * 100
+print(round(percent_change, 2))
 ```
 
 ```{r}
