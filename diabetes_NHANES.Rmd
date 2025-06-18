@@ -284,5 +284,8 @@ final_table
 
 ## **Interpretation:**
 
-After adjusting multiple factors such as age, BMI, physical activity, race, education, poverty, depression and gender, individuals with sleep trouble show a higher probability of having Type II diabetes. The predicted probability increases from 9 % to 14.3%, suggesting a moderate but meaningful association. These findings align with prior research linking sleep disorders with metabolic dysregulation and diabetes risk(Cappuccio et al., 2010; Darraj, 2023). 
+After all the analysis, the final table demonstrates that individuals who report having sleep trouble are significantly more likely to have Type II Diabetes, even after adjusting for other risk factors such as age, gender, BMI, physical activity, education level, race, depression, and poverty level.
 
+Specifically, sleep trouble was associated with a 44% increase in the odds of having diabetes, and the adjusted predicted probability of having diabetes was 14.2% for individuals with sleep trouble, compared to 8.7% for those without it.
+
+These findings support our hypothesis that sleep troubles is an meaningful factor in Type II Diabetes risk (Cappuccio et al., 2010; Darraj, 2023).
