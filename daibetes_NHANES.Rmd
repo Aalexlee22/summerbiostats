@@ -77,34 +77,34 @@ Sleep_data %>%
   )
 
 
-Sleep_data %>%  
-  ggplot(aes(x=Age, fill= Diabetes )) + 
-  geom_boxplot() + 
+Sleep_data %>%
+  ggplot(aes(x = Diabetes, y = Age, fill = Diabetes)) +
+  geom_boxplot() +
   labs(
-    title = "Percentage of Age by Diabetes II patients",
+    title = "Distribution of Age by Diabetes Status",
     subtitle = "Based on NHANES Data",
-    x = "Age",
-    fill = "Diabetes Status",
+    x = "Diabetes",
+    y = "Age (years)",
+    fill = "Diabetes",
     caption = "Figure 2") +
   theme_minimal() +
-    scale_fill_manual(values = c("No" = "darkgoldenrod1",  
-                               "Yes" = "cornflowerblue")) + 
+  scale_fill_manual(values = c("No" = "darkgoldenrod1", "Yes" = "cornflowerblue")) +
   theme(
-    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.title = element_text(hjust = 0.5, color = "deepskyblue4", size = 16, face = "bold"),
     plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
-    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+    plot.caption = element_text(hjust = 1, color = "gray50", size = 10, face = "italic")
   )
 
 
-
 Sleep_data %>%  
-  ggplot(aes(x=BMI, fill= Diabetes )) + 
+  ggplot(aes(x=Diabetes, y=BMI, fill= Diabetes )) + 
   geom_boxplot()+ 
   labs( 
     title = "Percentage of BMI by Diabetes II patients",
     subtitle = "Based on NHANES Data",
-    x = "BMI",
-    fill = "Diabetes Status",
+    x = "Diabetes",
+    y = "BMI",
+    fill = "Diabetes",
     caption = "Figure 3") +
   theme_minimal() +  
     scale_fill_manual(values = c("No" = "darkgoldenrod1",  
@@ -121,11 +121,11 @@ Sleep_data %>%
   ggplot(aes(x=PhysActive, fill= Diabetes)) + 
   geom_bar() + 
   labs(
-    y = "Proportion", 
+    y = "count", 
     title = "Prevalence of Type II Diabetes by Physical Activity",
     subtitle = "Based on NHANES Data",
     x = "PhysActive",
-    y = "Proportion",
+    y = "count",
     fill = "Diabetes Status",
     caption = "Figure 4") +
   theme_minimal()  +
@@ -159,6 +159,7 @@ Sleep_data %>%
     plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
     plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
   )
+
 
 
 Sleep_data %>% 
@@ -204,13 +205,16 @@ Sleep_data %>%  ggplot(aes(x=Depressed, fill= Diabetes)) +
   )
 
 
-Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) + 
+
+Sleep_data %>%  ggplot(aes(x= Diabetes, y=Poverty, fill= Diabetes)) + 
   geom_boxplot()  + 
   labs(
-    y = "Proportion", 
+    x= "Diabetes",
+    y = "Poverty lvl", 
     title = " Prevalence of Income Level by Type II Diabetes",
     subtitle = "Based on NHANES Data",
-    x = "Poverty",
+    x = "Diabetes",
+    y="Poverty",
     fill = "Diabetes Status",
     caption = "Figure 8") +
   theme_minimal() +  
@@ -222,14 +226,15 @@ Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) +
     plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
   )
 
+
 Sleep_data %>%  ggplot(aes(x=Gender, fill= Diabetes)) + 
   geom_bar()  + 
   labs(
-    y = "Proportion", 
+    y = "count", 
     title = " Prevalence of Type II Diabetes by Gender",
     subtitle = "Based on NHANES Data",
-    x = "Poverty",
-    y = "Proportion",
+    x = "Gender",
+    y = "count",
     fill = "Diabetes Status",
     caption = "Figure 9") +
   theme_minimal() +  
@@ -257,7 +262,7 @@ odds_ratios <- exp(coef(Sleep_data_glm))
 print(odds_ratios)
 ```
 ```{r OR to percent}
-percent_change <- (odds_ratios - 1) * 100
+percent_change <- odds_ratios/(1 + odds_ratios)
 print(round(percent_change, 2))
 ```
 
@@ -274,22 +279,6 @@ final_table
 ```
 
 
-```{r Final graph}
-Sleep_data %>% group_by(SleepTrouble) %>%
-  summarise(prob = mean(predicted, na.rm = TRUE)) %>%
-  ggplot(aes(x = SleepTrouble, y = prob)) + 
-  geom_col(fill = "cornflowerblue") + 
-  labs(
-    y = "Predicted Probability", 
-    title = "Estimated Probability of Type II Diabetes by Sleep Trouble",
-    caption = "Figure 10") + 
-  theme_minimal() +  
-  theme(
-    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
-    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
-    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
-  )
-```
 
 
 ## **Interpretation:**
