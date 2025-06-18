@@ -1,7 +1,7 @@
 ---
 output:
-  pdf_document: default
   html_notebook: default
+  pdf_document: default
   word_document: default
 ---
 # WHAT IS NHANES?
@@ -41,8 +41,8 @@ People with sleep trouble are more likely to have diabetes type II, even after a
 Select only the data that we will use.
 
 ```{r clean data}
-NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty)
-Sleep_data <-NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty) %>% filter(!is.na(Diabetes),!is.na(SleepTrouble), !is.na(Age), !is.na(BMI), !is.na(Education), !is.na(Race1),  !is.na(Depressed), !is.na(Poverty))
+NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty, Gender)
+Sleep_data <-NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty, Gender) %>% filter(!is.na(Diabetes),!is.na(SleepTrouble), !is.na(Age), !is.na(BMI), !is.na(Education), !is.na(Race1),  !is.na(Depressed), !is.na(Poverty),!is.na(Gender))
 summary(Sleep_data)
 
 ```
@@ -222,13 +222,32 @@ Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) +
     plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
   )
 
+Sleep_data %>%  ggplot(aes(x=Gender, fill= Diabetes)) + 
+  geom_bar()  + 
+  labs(
+    y = "Proportion", 
+    title = " Prevalence of Type II Diabetes by Gender",
+    subtitle = "Based on NHANES Data",
+    x = "Poverty",
+    y = "Proportion",
+    fill = "Diabetes Status",
+    caption = "Figure 9") +
+  theme_minimal() +  
+    scale_fill_manual(values = c("No" = "darkgoldenrod1",  
+                               "Yes" = "cornflowerblue")) + 
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
+
 ```
 
 ## Run logistical regression model
 
 
 ```{r logistical regression}
-Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Race1 + Depressed + Poverty, data= Sleep_data, family = binomial(link = "logit"))
+Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Race1 + Depressed + Poverty + Gender, data= Sleep_data, family = binomial(link = "logit"))
 summary(Sleep_data_glm)
 
 
@@ -246,7 +265,14 @@ print(round(percent_change, 2))
 Sleep_data <- Sleep_data %>%
   mutate(predicted = predict(Sleep_data_glm, newdata = Sleep_data, type = "response"))
 
+final_table <- Sleep_data %>%
+  group_by(SleepTrouble) %>%
+  summarise(predicted = mean(predicted, na.rm = TRUE)) %>%
+  mutate(percent = predicted * 100)
+
+final_table
 ```
+
 
 ```{r Final graph}
 Sleep_data %>% group_by(SleepTrouble) %>%
@@ -256,7 +282,7 @@ Sleep_data %>% group_by(SleepTrouble) %>%
   labs(
     y = "Predicted Probability", 
     title = "Estimated Probability of Type II Diabetes by Sleep Trouble",
-    caption = "Figure 9") + 
+    caption = "Figure 10") + 
   theme_minimal() +  
   theme(
     plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
@@ -264,28 +290,47 @@ Sleep_data %>% group_by(SleepTrouble) %>%
     plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
   )
 ```
+```{r}
+Sleep_data %>%
+  ggplot(aes(x = SleepTrouble, fill = Diabetes)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~ Gender) +
+  labs(title = "Prevalence of Type II Diabetes by Sleep Trouble and gender",
+    x = "sleep trouble",
+    y = "count",
+    fill = "Diabetes",
+    caption = "Figure 11") +
+  scale_fill_manual(values = c("No" = "darkgoldenrod1",  
+                               "Yes" = "cornflowerblue")) +  
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
 
-```{r results}
-final_table <- Sleep_data %>%
-  group_by(SleepTrouble) %>%
-  summarise(predicted = mean(predicted, na.rm = TRUE)) %>%
-  mutate(percent = predicted * 100)
+```
 
-final_table
+```{r}
+Sleep_data %>%
+  select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty, Gender) %>%
+  tbl_summary(by = Diabetes, statistic = all_continuous() ~ "{mean} ({sd})", 
+              missing = "no") %>%
+  add_overall() %>%
+  bold_labels()
 
 ```
 
 
+```{r}
+Sleep_data_glm %>%
+  tbl_regression(exp = TRUE) %>%
+  bold_labels()
+
+```
+
 
 ## **Interpretation:**
 
-This step predicts the probability of having diabetes for each person in the dataset. By grouping by SleepTrouble and taking the mean, you get something like:
-
-SleepTrouble = No → 8.7% probability
-
-SleepTrouble = Yes → 14.2% probability
-
-This indicates that, after adjusting for all factors, having sleep problems is associated with a higher probability of having Type 2 Diabetes.
-
+After adjusting for multiple factors such as age, BMI, physical activity, race, education, poverty, and depression, individuals with sleep trouble show a higher probability of having Type II diabetes. The predicted probability increases from 8.7% to 14.2%, suggesting a moderate but meaningful association. These findings align with prior research linking sleep disorders with metabolic dysregulation and diabetes risk.
 
 
