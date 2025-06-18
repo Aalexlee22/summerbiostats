@@ -22,6 +22,7 @@ library(gtsummary)
 library(NHANES)
 library(ggplot2)
 library(scales)
+library(gganimate)
 ```
 
 
@@ -249,25 +250,22 @@ Sleep_data %>%  ggplot(aes(x=Gender, fill= Diabetes)) +
 
 ## Run logistic regression model
 
-
 ```{r logistic regression}
 Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Race1 + Depressed + Poverty + Gender, data= Sleep_data, family = binomial(link = "logit"))
 summary(Sleep_data_glm)
-
-
 ```
 ```{r Odd ratios}
 odds_ratios <- exp(coef(Sleep_data_glm))
 print(odds_ratios)
 ```
-```{r OR to percent}
+```{r getting percent of OR}
 
 
 percent_change <- (odds_ratios-1)*100
 print(round(percent_change, 2))
-percent_change <- odds_ratios/(1 + odds_ratios)
-print(round(percent_change, 2))
+
 ```
+
 
 ```{r Predicted model}
 Sleep_data <- Sleep_data %>%
