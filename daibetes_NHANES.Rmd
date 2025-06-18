@@ -42,7 +42,7 @@ Select only the data that we will use.
 
 ```{r}
 NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty)
-Sleep_data <-NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty) %>% filter(!is.na(Diabetes),!is.na(SleepTrouble), !is.na(Age), !is.na(Education), !is.na(Race1),  !is.na(Depressed), !is.na(Poverty))
+Sleep_data <-NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty) %>% filter(!is.na(Diabetes),!is.na(SleepTrouble), !is.na(Age), !is.na(BMI), !is.na(Education), !is.na(Race1),  !is.na(Depressed), !is.na(Poverty))
 summary(Sleep_data)
 
 ```
@@ -51,24 +51,69 @@ summary(Sleep_data)
 
 To have an overview of the relationship between diabetes and other factors, a graphic model of each of them was created.
 
+
 ```{r Graphics}
-Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + labs(y = "Proportion", title = "Prevalence of Type II Diabetes by Sleep Trouble")
+
+
+Sleep_data %>%  ggplot(aes(x=SleepTrouble, fill= Diabetes )) + geom_bar(position="fill") + scale_y_continuous(labels = scales::percent) + 
+  labs(
+  y = "Proportion", 
+  title = "Prevalence of Type II Diabetes by Sleep Trouble",
+    subtitle = "Based on NHANES Data",
+    x = "Sleep Trouble",
+    y = "Proportion",
+    fill = "Diabetes Status",
+    caption = "Figure 1") +
+  theme_minimal() +
+  scale_fill_manual(values = c("No" = "darkgoldenrod1",  
+                               "Yes" = "cornflowerblue")) +  
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
 
 
 Sleep_data %>%  
   ggplot(aes(x=Age, fill= Diabetes )) + 
   geom_boxplot() + 
   labs(
-    title = "Percentage of Diabetes II patients by Age") +
-  theme_minimal()
+    title = "Percentage of Diabetes II patients by Age",
+    subtitle = "Based on NHANES Data",
+    x = "Age",
+    y = "Proportion",
+    fill = "Diabetes Status",
+    caption = "Figure 2") +
+  theme_minimal() +
+    scale_fill_manual(values = c("No" = "darkgoldenrod1",  
+                               "Yes" = "cornflowerblue")) + 
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
+
 
 
 Sleep_data %>%  
   ggplot(aes(x=BMI, fill= Diabetes )) + 
   geom_boxplot()+ 
   labs( 
-    title = "Percentage of Diabetes II patients by BMI") +
-  theme_minimal()
+    title = "Percentage of Diabetes II patients by BMI",
+    subtitle = "Based on NHANES Data",
+    x = "BMI",
+    y = "Proportion",
+    fill = "Diabetes Status",
+    caption = "Figure 3") +
+  theme_minimal() +  
+    scale_fill_manual(values = c("No" = "darkgoldenrod1",  
+                               "Yes" = "cornflowerblue")) + 
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
+
 
 
 Sleep_data %>%  
@@ -76,8 +121,21 @@ Sleep_data %>%
   geom_bar() + 
   labs(
     y = "Proportion", 
-    title = "Prevalence of Type II Diabetes by Physical Activity") +
-  theme_minimal()
+    title = "Prevalence of Type II Diabetes by Physical Activity",
+    subtitle = "Based on NHANES Data",
+    x = "PhysActive",
+    y = "Proportion",
+    fill = "Diabetes Status",
+    caption = "Figure 4") +
+  theme_minimal()  +
+  scale_fill_manual(values = c("No" = "darkgoldenrod1",  
+                               "Yes" = "cornflowerblue")) +  
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
+
 
 
 Sleep_data %>% 
@@ -86,8 +144,20 @@ Sleep_data %>%
   scale_y_continuous(labels = scales::percent) + 
   labs(
     y = "Proportion", 
-    title = "Percentage of Diabetes II patients by Education Level")+
-  theme_minimal()
+    title = "Percentage of Diabetes II patients by Education Level",
+    subtitle = "Based on NHANES Data",
+    x = "Education",
+    y = "Proportion",
+    fill = "Diabetes Status",
+    caption = "Figure 5")+
+  theme_minimal()  +
+  scale_fill_manual(values = c("No" = "darkgoldenrod1",  
+                               "Yes" = "cornflowerblue")) +  
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
 
 
 Sleep_data %>% 
@@ -96,24 +166,62 @@ Sleep_data %>%
   scale_y_continuous(labels = scales::percent) + 
   labs(
     y = "Proportion", 
-    title = "Percentage of Diabetes II patients by Race") +
-  theme_minimal()
+    title = "Percentage of Diabetes II patients by Race",
+    subtitle = "Based on NHANES Data",
+    x = "Race1",
+    y = "Proportion",
+    fill = "Diabetes Status",
+    caption = "Figure 6") +
+  theme_minimal()  +
+  scale_fill_manual(values = c("No" = "darkgoldenrod1",  
+                               "Yes" = "cornflowerblue")) +  
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
+
 
 
 Sleep_data %>%  ggplot(aes(x=Depressed, fill= Diabetes)) + 
   geom_bar(position="fill") + 
   scale_y_continuous(labels = scales::percent) + 
   labs(y = "Proportion", 
-       title = "Prevalence of Type II Diabetes by Depression Status")+
-  theme_minimal()
+       title = "Prevalence of Type II Diabetes by Depression Status",
+       subtitle = "Based on NHANES Data",
+    x = "Depressed",
+    y = "Proportion",
+    fill = "Diabetes Status",
+    caption = "Figure 7")+
+  theme_minimal()  +
+  scale_fill_manual(values = c("No" = "darkgoldenrod1",  
+                               "Yes" = "cornflowerblue")) +  
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
 
 
 Sleep_data %>%  ggplot(aes(x=Poverty, fill= Diabetes)) + 
   geom_boxplot()  + 
   labs(
     y = "Proportion", 
-    title = " Prevalence of Type II Diabetes by Income Level") +
-  theme_minimal()
+    title = " Prevalence of Type II Diabetes by Income Level",
+    subtitle = "Based on NHANES Data",
+    x = "Poverty",
+    y = "Proportion",
+    fill = "Diabetes Status",
+    caption = "Figure 8") +
+  theme_minimal() +  
+    scale_fill_manual(values = c("No" = "darkgoldenrod1",  
+                               "Yes" = "cornflowerblue")) + 
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
+
 ```
 
 ## Run logistical regression model
@@ -143,7 +251,18 @@ Sleep_data <- Sleep_data %>%
 ```{r}
 Sleep_data %>% group_by(SleepTrouble) %>%
   summarise(prob = mean(predicted, na.rm = TRUE)) %>%
-  ggplot(aes(x = SleepTrouble, y = prob)) + geom_col(fill = "cornflowerblue") + labs(y = "Predicted Probability", title = "Estimated Probability of Type II Diabetes by Sleep Trouble") + theme_minimal()
+  ggplot(aes(x = SleepTrouble, y = prob)) + 
+  geom_col(fill = "cornflowerblue") + 
+  labs(
+    y = "Predicted Probability", 
+    title = "Estimated Probability of Type II Diabetes by Sleep Trouble",
+    caption = "Figure 9") + 
+  theme_minimal() +  
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
 ```
 
 
