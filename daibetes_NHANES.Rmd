@@ -13,7 +13,6 @@ Starting in 1999, about 5,000 individuals of all ages have been interviewed ever
 ```{r data}
 data(NHANES) 
 dim(NHANES)
-summary(NHANES)
 ```
 Before we start, it is necessary run the packages that we are going to use, in this case would be: 
 
@@ -248,10 +247,10 @@ Sleep_data %>%  ggplot(aes(x=Gender, fill= Diabetes)) +
 
 ```
 
-## Run logistical regression model
+## Run logistic regression model
 
 
-```{r logistical regression}
+```{r logistic regression}
 Sleep_data_glm<-glm(Diabetes ~ SleepTrouble + Age + BMI+ PhysActive + Education + Race1 + Depressed + Poverty + Gender, data= Sleep_data, family = binomial(link = "logit"))
 summary(Sleep_data_glm)
 
@@ -262,6 +261,10 @@ odds_ratios <- exp(coef(Sleep_data_glm))
 print(odds_ratios)
 ```
 ```{r OR to percent}
+
+
+percent_change <- (odds_ratios-1)*100
+print(round(percent_change, 2))
 percent_change <- odds_ratios/(1 + odds_ratios)
 print(round(percent_change, 2))
 ```
@@ -283,5 +286,5 @@ final_table
 
 ## **Interpretation:**
 
-After adjusting multiple factors such as age, BMI, physical activity, race, education, poverty, depression and gender, individuals with sleep trouble show a higher probability of having Type II diabetes. The predicted probability increases from 8.7% to 14.2%, suggesting a moderate but meaningful association. These findings align with prior research linking sleep disorders with metabolic dysregulation and diabetes risk(Cappuccio et al., 2010; Darraj, 2023). 
+After adjusting multiple factors such as age, BMI, physical activity, race, education, poverty, depression and gender, individuals with sleep trouble show a higher probability of having Type II diabetes. The predicted probability increases from 9 % to 14.3%, suggesting a moderate but meaningful association. These findings align with prior research linking sleep disorders with metabolic dysregulation and diabetes risk(Cappuccio et al., 2010; Darraj, 2023). 
 
