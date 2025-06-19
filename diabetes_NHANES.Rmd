@@ -280,6 +280,24 @@ final_table
 ```
 
 
+```{r Final graph}
+Sleep_data %>% group_by(SleepTrouble) %>%
+  summarise(prob = mean(predicted, na.rm = TRUE)) %>%
+  ggplot(aes(x = SleepTrouble, y = prob)) + 
+  geom_col(fill = "cornflowerblue") + 
+  labs(
+    y = "Predicted Probability", 
+    title = "Estimated Probability of Type II Diabetes by Sleep Trouble",
+    caption = "Figure 10") + 
+  theme_minimal() +  
+  theme(
+    plot.title = element_text(hjust = 0.5,  color = "deepskyblue4", size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray30", size = 12),
+    plot.caption = element_text(hjust = 1,  color = "gray50", size = 10, face = "italic")
+  )
+```
+
+
 
 
 ## **Interpretation:**
