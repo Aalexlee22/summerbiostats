@@ -307,3 +307,8 @@ After all the analysis, the final table demonstrates that individuals who report
 Specifically, sleep trouble was associated with a 44% increase in the odds of having diabetes, and the adjusted predicted probability of having diabetes was 14.3 % for individuals with sleep trouble, compared to 9.06 % for those without it.
 
 These findings support our hypothesis that sleep troubles is an meaningful factor in Type II Diabetes risk (Cappuccio et al., 2010; Darraj, 2023).
+
+
+## **Poster**
+
+![Poster](Beige Minimalist Sales Data Statistic Graph .png)
