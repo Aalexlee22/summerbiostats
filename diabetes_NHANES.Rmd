@@ -14,7 +14,7 @@ Starting in 1999, about 5,000 individuals of all ages have been interviewed ever
 data(NHANES) 
 dim(NHANES)
 ```
-Before we start, it is necessary run the packages that we are going to use, in this case would be: 
+The used packages were listed below:
 
 ```{r setup}
 library(tidyverse)
@@ -38,7 +38,7 @@ People with sleep trouble are more likely to have diabetes type II, even after a
 
 ### Preparing the data
 
-Select only the data that we will use.
+Select only the data that we will use, in this case were sleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty, Gender.
 
 ```{r clean data}
 NHANES %>% select(Diabetes, SleepTrouble, Age, BMI, PhysActive, Education, Race1, Depressed, Poverty, Gender)
